@@ -1,0 +1,15 @@
+#!/usr/bin/env python
+
+
+
+def kb_talker():
+  """Keyboard talker publishes keyboard input
+  """
+  pub = rospy.Publisher("keyboard_command", String, queue_size=10)
+  rospy.init_node("")
+
+if __name__=="main":
+  try:
+    kb_talker()
+  except rospy.ROSInterruptException:
+    pass
