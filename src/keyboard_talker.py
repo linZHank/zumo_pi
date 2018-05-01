@@ -1,6 +1,10 @@
 #!/usr/bin/env python
+from __future__ import absolute_import
+from __future__ import print_function
 
-
+import getch
+import rospy
+from std_msgs.msg import String
 
 def kb_talker():
   """Keyboard talker publishes keyboard input
@@ -9,8 +13,23 @@ def kb_talker():
   rospy.init_node("keypress", annoymous=True)
   rate = rospy.Rate(10)
   while not rospy.is_shutdown():
-    key = ord(getch.getch()) # convert whatever key pressed (keyboard, joypad, joystick...) to an ord value
-    
+    cmd = getch.getch() # cmd will be a unicode
+    # publish only 'a', 's', 'd', 'w'
+    if cmd == 'a':
+      rospy.loginfo("{}: Turning left <".format(str(cmd)))
+      pub.publish(cmd)
+    elif cmd == 's':
+      rospy.loginfo("{}: Moving backward v".format(str(cmd)))
+      pub.publish(cmd)
+    elif cmd == 'd':
+      rospy.loginfo("{}: Turning right >".format(str(cmd)))
+      pub.publish(cmd)
+    elif cmd == 'w':
+      rospy.loginfo("{}: Moving forward ^".format(str(cmd)))
+      pub.publish(cmd)
+    else:
+      pass
+    rate.sleep()
 
 if __name__=="main":
   try:
