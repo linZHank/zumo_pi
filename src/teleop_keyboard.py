@@ -10,6 +10,9 @@ from std_msgs.msg import String
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 
+LEFT_TRIM   = 0
+RIGHT_TRIM  = 0
+
 class Robot(object):
   def __init__(self, addr=0x60, left_id=1, right_id=2, left_trim=0, right_trim=0,
                stop_at_exit=True):
