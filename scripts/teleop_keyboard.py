@@ -8,7 +8,9 @@ from std_msgs.msg import String
 from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 import Robot
 
-def callback(data, zumo):
+zumo = Robot.Robot()
+
+def callback(data):
   if data.data == 'a':
     rospy.loginfo("{}: Turning left <".format(data.data))
     zumo.left(128, 0.1)
@@ -26,11 +28,10 @@ def callback(data, zumo):
     pass
 
 def executor():
-  rospy.Subscriber("keyboard_command", String, callback, callback_args=zumo)
+  rospy.Subscriber("keyboard_command", String, callback)
   
 def main():
   rospy.init_node("zumo_teleop")
-  zumo = Robot.Robot()
   executor()
   rospy.spin()
   
