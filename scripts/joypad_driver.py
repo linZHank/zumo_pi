@@ -10,24 +10,6 @@ import Robot
 
 zumo = Robot.Robot()
 
-def callback(data):
-  if data.data == 'a':
-    rospy.loginfo("{}: Turning left <".format(data.data))
-    zumo.left(128, 0.1)
-  elif data.data == 's':
-    rospy.loginfo("{}: Moving backward v".format(data.data))
-    zumo.backward(64, 0.1)
-  elif data.data == 'd':
-    rospy.loginfo("{}: Turning right >".format(data.data))
-    zumo.right(128, 0.1)
-  elif data.data == 'w':
-    rospy.loginfo("{}: Moving forward ^".format(data.data))
-    zumo.forward(128, 0.1)
-  else:
-    print("...")
-    pass
-
-
 class Driver:
   def __init__(self):
     rospy.init_node('driver')
@@ -35,9 +17,9 @@ class Driver:
     self._last_received = rospy.get_time()
     self._timeout = rospy.get_param('~timeout', 2)
     self._rate = rospy.get_param('~rate', 10)
-    self._max_speed = rospy.get_param('~max_speed', 0.5)
-    self._wheel_base = rospy.get_param('~wheel_base', 0.09)
-
+    self._mode = "S" # stop
+    self._max_speed = 255 # max zumo speed
+    self._zumo_speed = 0
     # Setup subscriber for velocity twist message
     rospy.Subscriber("cmd_vel", Twist, self.velocity_received_callback)
 
@@ -49,19 +31,33 @@ class Driver:
     # Extract linear and angular velocities from the message
     linear = message.linear.x
     angular = message.angular.z
-
-    # Ideally we'd now use the desired wheel speeds along
-    # with data from wheel speed sensors to come up with the
-    # power we need to apply to the wheels, but we don't have
-    # wheel speed sensors. Instead, we'll simply convert m/s
-    # into percent of maximum wheel speed, which gives us a
-    # duty cycle that we can apply to each motor.
-    self._left_speed = left_speed/self._max_speed * max_robot_speed
-    self._right_speed_percent = (100 * right_speed/self._max_speed)
-
+    # Determine moving mode by linear and angular velocity
+    assert abs(linear<4e-3) or abs(angular<4e-3) # they cannot both be greater than 0
+    if linear >= 4e-3:
+      self._mode = "F" # forward
+      self._zumo_speed = int(linear*self._max_speed)
+      if self._zumo_speed > self._max_speed:
+        self._zumo_speed = self._max_speed
+    elif linear <= -4e-3:
+      self._mode = "B" # backward
+      self._zumo_speed = int(-linear*self._max_speed)
+      if self._zumo_speed > self._max_speed:
+        self._zumo_speed = self._max_speed
+    elif angular >= 4e-3:
+      self._mode = "L" # left turn
+      self._zumo_speed = int(angular*self._max_speed)
+      if self._zumo_speed > self._max_speed:
+        self._zumo_speed = self._max_speed
+    elif linear <= -4e-3:
+      self._mode = "R" # right turn
+      self._zumo_speed = int(-angular*self._max_speed)
+      if self._zumo_speed > self._max_speed:
+        self._zumo_speed = self._max_speed
+    else:
+      self._mode = "S"
+        
   def run(self):
     """The control loop of the driver."""
-
     rate = rospy.Rate(self._rate)
 
     while not rospy.is_shutdown():
@@ -70,11 +66,18 @@ class Driver:
       # moving
       delay = rospy.get_time() - self._last_received
       if delay < self._timeout:
-        self._left_motor.move(self._left_speed_percent)
-        self._right_motor.move(self._right_speed_percent)
+        if self._mode == "F":
+          zumo.forward(self._zumo_speed, 1./self._rate)
+        elif self._mode == "B":
+          zumo.backward(self._zumo_speed, 1./self._rate)
+        elif self._mode == "L":
+          zumo.left(self._zumo_speed, 1./self._rate)
+        elif self._mode == "R":
+          zumo.right(self._zumo_speed, 1./self._rate)
+        else:
+          zumo.stop()
       else:
-        self._left_motor.move(0)
-        self._right_motor.move(0)
+        zumo.stop()
 
       rate.sleep()
       
