@@ -12,8 +12,6 @@ zumo = Robot.Robot()
 
 class Driver:
   def __init__(self):
-    rospy.init_node('driver')
-
     self._last_received = rospy.get_time()
     self._timeout = rospy.get_param('~timeout', 2)
     self._rate = rospy.get_param('~rate', 10)
