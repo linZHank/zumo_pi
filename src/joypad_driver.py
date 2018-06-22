@@ -81,7 +81,7 @@ class Driver:
       rate.sleep()
       
 def main():
-  rospy.init_node("driver_node")
+  rospy.init_node("driver")
   driver = Driver()
   driver.run()
   rospy.spin()
