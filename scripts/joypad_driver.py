@@ -80,7 +80,7 @@ class Driver:
       rate.sleep()
       
 def main():
-  rospy.init_node("joypad_driver")
+  rospy.init_node("driver_node")
   driver = Driver()
   driver.run()
   rospy.spin()
