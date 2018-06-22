@@ -1,3 +1,3 @@
 <launch>
-  <node name="driver" pkg="zumo_pi" type="joypad_driver" />
+  <node name="driver" pkg="zumo_pi" type="joypad_driver.py" />
 </launch>
