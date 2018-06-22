@@ -4,9 +4,10 @@ from __future__ import print_function
 
 import getch
 import rospy
-from std_msgs.msg import String
+from geometry_msgs.msg import Twist
 from Adafruit_MotorHAT import Adafruit_MotorHAT, Adafruit_DCMotor
 import Robot
+
 
 zumo = Robot.Robot()
 
@@ -46,7 +47,7 @@ class Driver:
       self._zumo_speed = int(angular*self._max_speed)
       if self._zumo_speed > self._max_speed:
         self._zumo_speed = self._max_speed
-    elif linear <= -4e-3:
+    elif angular <= -4e-3:
       self._mode = "R" # right turn
       self._zumo_speed = int(-angular*self._max_speed)
       if self._zumo_speed > self._max_speed:
