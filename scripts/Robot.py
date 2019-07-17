@@ -1,11 +1,17 @@
-# Simple two DC motor robot class.  Exposes a simple LOGO turtle-like API for
-# moving a robot forward, backward, and turning.  See RobotTest.py for an
-# example of using this class.
-# Author: Tony DiCola
-# License: MIT License https://opensource.org/licenses/MIT
-from __future__ import print_function
+#!/usr/bin/env python  
+
+"""
+Two DC motor differential drive robot class.  
+moving a robot forward, backward, and turning.
+Thanks to Tony DiCola's work in Adafruit_MotorHAT
+License: MIT License https://opensource.org/licenses/MIT
+"""
+
+from __future__ import absolute_import, print_function
 import time
 import atexit
+import rospy
+from geometry_msgs.msg import Twist
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 
@@ -35,6 +41,8 @@ class Robot(object):
         # Start with motors turned off.
         self._left.run(Adafruit_MotorHAT.RELEASE)
         self._right.run(Adafruit_MotorHAT.RELEASE)
+	# Subscribe to /cmd_vel
+	rospy.Subscriber("cmd_vel", Twist, self._cmd_vel_callback)
         # Configure all motors to stop at program exit if desired.
         if stop_at_exit:
             atexit.register(self.stop)
