@@ -67,8 +67,8 @@ class Zumo(object):
         left_speed = linear - angular*self._wheel_base/2
         right_speed = linear + angular*self._wheel_base/2
         # Compute motor speed in scale of [0,255]
-        self._left_speed_scale = (255 * left_speed/self._max_speed)
-        self._right_speed_scale = (255 * right_speed/self._max_speed)
+        self._left_speed_scale = int(255 * left_speed/self._max_speed)
+        self._right_speed_scale = int(255 * right_speed/self._max_speed)
         assert -255 <= self._left_speed_scale <= 255
         assert -255 <= self._right_speed_scale <= 255
 
