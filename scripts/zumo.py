@@ -116,5 +116,5 @@ class Zumo(object):
 
     def stop(self):
         """Stop all movement."""
-        self._left.run(Adafruit_MotorHAT.RELEASE)
-        self._right.run(Adafruit_MotorHAT.RELEASE)
+        self._left_motor.run(Adafruit_MotorHAT.RELEASE)
+        self._right_motor.run(Adafruit_MotorHAT.RELEASE)
