@@ -39,6 +39,8 @@ class Zumo(object):
         self._right_motor = self._mh.getMotor(right_id)
         self._left_trim = left_trim
         self._right_trim = right_trim
+        self._left_speed_scale = 0
+        self._right_speed_scale = 0
         self._left_motor.run(Adafruit_MotorHAT.RELEASE)
         self._right_motor.run(Adafruit_MotorHAT.RELEASE) # start with motors turned off
         # ROS params
@@ -70,21 +72,21 @@ class Zumo(object):
         assert -255 <= self._left_speed_scale <= 255
         assert -255 <= self._right_speed_scale <= 255
 
-    def _left_speed(self, speed):
-        """Set the speed of the left motor, taking into account its trim offset.
-        """
-        assert 0 <= speed <= 255, 'Speed must be a value between 0 to 255 inclusive!'
-        speed += self._left_trim
-        speed = max(0, min(255, speed))  # Constrain speed to 0-255 after trimming.
-        self._left_motor.setSpeed(speed)
-
-    def _right_speed(self, speed):
-        """Set the speed of the right motor, taking into account its trim offset.
-        """
-        assert 0 <= speed <= 255, 'Speed must be a value between 0 to 255 inclusive!'
-        speed += self._right_trim
-        speed = max(0, min(255, speed))  # Constrain speed to 0-255 after trimming.
-        self._right_motor.setSpeed(speed)
+    # def _left_speed(self, speed):
+    #     """Set the speed of the left motor, taking into account its trim offset.
+    #     """
+    #     assert 0 <= speed <= 255, 'Speed must be a value between 0 to 255 inclusive!'
+    #     speed += self._left_trim
+    #     speed = max(0, min(255, speed))  # Constrain speed to 0-255 after trimming.
+    #     self._left_motor.setSpeed(speed)
+    #
+    # def _right_speed(self, speed):
+    #     """Set the speed of the right motor, taking into account its trim offset.
+    #     """
+    #     assert 0 <= speed <= 255, 'Speed must be a value between 0 to 255 inclusive!'
+    #     speed += self._right_trim
+    #     speed = max(0, min(255, speed))  # Constrain speed to 0-255 after trimming.
+    #     self._right_motor.setSpeed(speed)
 
     def run(self):
         """
