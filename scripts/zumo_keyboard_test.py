@@ -7,5 +7,4 @@ from zumo import Zumo
 zumo = Zumo()
 
 if __name__ == "__main__":
-    main()
     zumo.run()
