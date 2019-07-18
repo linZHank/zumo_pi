@@ -10,6 +10,7 @@ License: MIT License https://opensource.org/licenses/MIT
 from __future__ import absolute_import, print_function
 import time
 import atexit
+import numpy as np
 import rospy
 from geometry_msgs.msg import Twist
 
@@ -67,8 +68,8 @@ class Zumo(object):
         left_speed = linear - angular*self._wheel_base/2
         right_speed = linear + angular*self._wheel_base/2
         # Compute motor speed in scale of [0,255]
-        self._left_speed_scale = int(255 * left_speed/self._max_speed)
-        self._right_speed_scale = int(255 * right_speed/self._max_speed)
+        self._left_speed_scale = np.clip(int(255 * left_speed/self._max_speed), -255, 255)
+        self._right_speed_scale = np.clip(int(255 * right_speed/self._max_speed), -255, 255)
         assert -255 <= self._left_speed_scale <= 255
         assert -255 <= self._right_speed_scale <= 255
 
@@ -101,13 +102,13 @@ class Zumo(object):
                     self._left_motor.setSpeed(self._left_speed_scale)
                     self._left_motor.run(Adafruit_MotorHAT.FORWARD)
                 else:
-                    self._left_motor.setSpeed(math.abs(self._left_speed_scale))
+                    self._left_motor.setSpeed(np.abs(self._left_speed_scale))
                     self._left_motor.run(Adafruit_MotorHAT.BACKWARD)
                 if self._right_speed_scale >= 0: # set right motor speed and dir
                     self._right_motor.setSpeed(self._right_speed_scale)
                     self._right_motor.run(Adafruit_MotorHAT.FORWARD)
                 else:
-                    self._right_motor.setSpeed(math.abs(self._right_speed_scale))
+                    self._right_motor.setSpeed(np.abs(self._right_speed_scale))
                     self._right_motor.run(Adafruit_MotorHAT.BACKWARD)
             else:
                 self._left_motor.run(Adafruit_MotorHAT.RELEASE)
