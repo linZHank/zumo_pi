@@ -2,9 +2,9 @@
 from __future__ import absolute_import, print_function
 
 import rospy
-from zumo import Zumo
+from zumo import zumo_driver
 
-zumo = Zumo()
+zumo = zumo_driver.Driver()
 
 if __name__ == "__main__":
     zumo.run()
