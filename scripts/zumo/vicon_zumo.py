@@ -11,10 +11,10 @@ import numpy as np
 import rospy
 from geometry_msgs.msg import Twist, TransformStamped
 
-import zumo_driver
+from .zumo_driver import ZumoDriver
 
 
-class ViconZumo(zumo_driver.ZumoDriver):
+class ViconZumo(ZumoDriver):
     def __init__(self):
         """
         A Vicon guided Zumo class
@@ -25,6 +25,8 @@ class ViconZumo(zumo_driver.ZumoDriver):
     	# Subscribers
     	rospy.Subscriber('vicon/KUKA_TOOL/KUKA_TOOL', TransformStamped, self._obj_trans_callback)
     	rospy.Subscriber('vicon/zumo/zumo', TransformStamped, self._zumo_trans_callback)
+        # execute superclass.__init__
+        super(ViconZumo, self).__init__()
 
     def _obj_trans_callback(self, data):
         """

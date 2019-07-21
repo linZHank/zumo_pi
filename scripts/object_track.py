@@ -10,6 +10,7 @@ class ViconZumo(zumo_driver.ZumoDriver):
         """
         A Vicon guided Zumo class
         """
+        self.__init__()
         # Init tracked pose
         self.obj_transform = TransformStamped().transform
         self.zumo_transform = TransformStamped().transform
