@@ -19,7 +19,7 @@ from Adafruit_MotorHAT import Adafruit_MotorHAT
 
 class ZumoDriver(object):
     def __init__(self, addr=0x60, left_id=4, right_id=1, left_trim=0, right_trim=0,
-                 stop_at_exit=True):
+                 stop_at_exit=True, log_level=rospy.INFO):
         """Create an instance of the robot.  Can specify the following optional
         parameters:
          - addr: The I2C address of the motor HAT, default is 0x60.
@@ -33,7 +33,7 @@ class ZumoDriver(object):
                          exit.  Default is True (highly recommended to keep this
                          value to prevent damage to the bot on program crash!).
         """
-        rospy.init_node('zumo', anonymous=True, log_level=rospy.DEBUG)
+        rospy.init_node('zumo_driver', anonymous=True, log_level=log_level)
         # Initialize motor HAT and left, right motor.
         self._mh = Adafruit_MotorHAT(addr)
         self._left_motor = self._mh.getMotor(left_id)
@@ -64,6 +64,7 @@ class ZumoDriver(object):
         # Extract linear and angular velocities from the message
         linear = data.linear.x
         angular = data.angular.z
+        rospy.logdebug("cmd_vel: {}".format(data))
         # Calculate wheel speeds in m/s
         left_speed = linear - angular*self._wheel_base/2
         right_speed = linear + angular*self._wheel_base/2
@@ -72,22 +73,6 @@ class ZumoDriver(object):
         self._right_speed_scale = np.clip(int(255 * right_speed/self._max_speed), -255, 255)
         assert -255 <= self._left_speed_scale <= 255
         assert -255 <= self._right_speed_scale <= 255
-
-    # def _left_speed(self, speed):
-    #     """Set the speed of the left motor, taking into account its trim offset.
-    #     """
-    #     assert 0 <= speed <= 255, 'Speed must be a value between 0 to 255 inclusive!'
-    #     speed += self._left_trim
-    #     speed = max(0, min(255, speed))  # Constrain speed to 0-255 after trimming.
-    #     self._left_motor.setSpeed(speed)
-    #
-    # def _right_speed(self, speed):
-    #     """Set the speed of the right motor, taking into account its trim offset.
-    #     """
-    #     assert 0 <= speed <= 255, 'Speed must be a value between 0 to 255 inclusive!'
-    #     speed += self._right_trim
-    #     speed = max(0, min(255, speed))  # Constrain speed to 0-255 after trimming.
-    #     self._right_motor.setSpeed(speed)
 
     def run(self):
         """
@@ -101,15 +86,19 @@ class ZumoDriver(object):
                 if self._left_speed_scale >= 0: # set left motor speed and dir
                     self._left_motor.setSpeed(self._left_speed_scale)
                     self._left_motor.run(Adafruit_MotorHAT.FORWARD)
+                    rospy.logdebug("Left motor foward: {}".format(self._left_speed_scale))
                 else:
                     self._left_motor.setSpeed(np.abs(self._left_speed_scale))
                     self._left_motor.run(Adafruit_MotorHAT.BACKWARD)
+                    rospy.logdebug("Left motor backward: {}".format(self._left_speed_scale))
                 if self._right_speed_scale >= 0: # set right motor speed and dir
                     self._right_motor.setSpeed(self._right_speed_scale)
                     self._right_motor.run(Adafruit_MotorHAT.FORWARD)
+                    rospy.logdebug("Right motor foward: {}".format(self._right_speed_scale))
                 else:
                     self._right_motor.setSpeed(np.abs(self._right_speed_scale))
                     self._right_motor.run(Adafruit_MotorHAT.BACKWARD)
+                    rospy.logdebug("Right motor backward: {}".format(self._right_speed_scale))
             else:
                 self._left_motor.run(Adafruit_MotorHAT.RELEASE)
                 self._right_motor.run(Adafruit_MotorHAT.RELEASE)
