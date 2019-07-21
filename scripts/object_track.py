@@ -38,7 +38,7 @@ if __name__ == "__main__":
     elif err_ang < -np.pi:
         err_ang += np.pi*2
     del_err_ang = 0
-
+    rate = rospy.Rate(zumo._rate)
     while not rospy.is_shutdown():
         cmd_vel = Twist()
         v_lin = KP_LIN*err_lin + KD_LIN*del_err_lin
@@ -47,4 +47,4 @@ if __name__ == "__main__":
         cmd_vel.angular.z = v_ang
         cmd_vel_pub.publish(cmd_vel)
         rospy.loginfo("cmd_vel: {}".format(cmd_vel))
-        zumo._rate.sleep()
+        rate.sleep()
