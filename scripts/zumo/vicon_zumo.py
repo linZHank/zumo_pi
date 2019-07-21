@@ -1,10 +1,7 @@
 #!/usr/bin/env python
 
 """
-Two DC motor differential drive robot class.
-moving a robot forward, backward, and turning.
-Thanks to Tony DiCola's work in Adafruit_MotorHAT
-License: MIT License https://opensource.org/licenses/MIT
+Zumo Robot working under the Vicon MoCap System
 """
 
 from __future__ import absolute_import, print_function
@@ -14,16 +11,14 @@ import numpy as np
 import rospy
 from geometry_msgs.msg import Twist, TransformStamped
 
-from Adafruit_MotorHAT import Adafruit_MotorHAT
+from zumo_driver import ZumoDriver
 
 
-class ViconBridge(object):
-    def __init__(self, log_level=rospy.INFO):
+class ViconZumo(ZumoDriver):
+    def __init__(self):
         """
-        A vicon_bridge class
+        A Vicon guided Zumo class
         """
-        rospy.init_node('vicon_bridge', anonymous=True, log_level=rospy.DEBUG)
-        rospy.loginfo("Initiate vicon_bridge node.")
         # Init tracked pose
         self.obj_transform = TransformStamped().transform
         self.zumo_transform = TransformStamped().transform

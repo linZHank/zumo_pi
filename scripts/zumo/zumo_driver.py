@@ -12,7 +12,7 @@ import time
 import atexit
 import numpy as np
 import rospy
-from geometry_msgs.msg import Twist
+from geometry_msgs.msg import Twist, TransformStamped
 
 from Adafruit_MotorHAT import Adafruit_MotorHAT
 
@@ -52,7 +52,7 @@ class ZumoDriver(object):
         self._max_speed = rospy.get_param('~max_speed', 0.5)
         self._wheel_base = rospy.get_param('~wheel_base', 0.086)
     	# Subscribe to /cmd_vel
-    	rospy.Subscriber("cmd_vel", Twist, self._cmd_vel_callback)
+    	rospy.Subscriber('cmd_vel', Twist, self._cmd_vel_callback)
         # Configure all motors to stop at program exit if desired.
         if stop_at_exit:
             atexit.register(self.stop)
