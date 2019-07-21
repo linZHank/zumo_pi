@@ -34,6 +34,7 @@ class ZumoDriver(object):
                          value to prevent damage to the bot on program crash!).
         """
         rospy.init_node('zumo_driver', anonymous=True, log_level=log_level)
+        rospy.loginfo("Initiate zumo_driver node.")
         # Initialize motor HAT and left, right motor.
         self._mh = Adafruit_MotorHAT(addr)
         self._left_motor = self._mh.getMotor(left_id)
