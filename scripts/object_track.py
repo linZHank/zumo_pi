@@ -2,6 +2,7 @@
 from __future__ import absolute_import, print_function
 
 import rospy
+from geometry_msgs.msg import TransformStamped
 from zumo import zumo_driver
 
 class ViconZumo(zumo_driver.ZumoDriver):
