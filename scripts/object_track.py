@@ -47,3 +47,4 @@ if __name__ == "__main__":
         cmd_vel.angular.z = v_ang
         cmd_vel_pub.publish(cmd_vel)
         rospy.loginfo("cmd_vel: {}".format(cmd_vel))
+        zumo._rate.sleep()
