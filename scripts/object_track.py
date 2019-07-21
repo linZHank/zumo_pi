@@ -12,7 +12,7 @@ KP_ANG = 0.1
 
 if __name__ == "__main__":
     # Instantiate zumo driver
-    zumo = vicon_zumo.ViconZumo(log_level=rospy.DEBUG)
+    zumo = vicon_zumo.ViconZumo()
     zumo.run()
     #
 #    while not rospy.is_shutdown():

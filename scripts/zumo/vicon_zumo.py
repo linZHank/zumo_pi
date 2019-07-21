@@ -26,7 +26,7 @@ class ViconZumo(ZumoDriver):
     	rospy.Subscriber('vicon/KUKA_TOOL/KUKA_TOOL', TransformStamped, self._obj_trans_callback)
     	rospy.Subscriber('vicon/zumo/zumo', TransformStamped, self._zumo_trans_callback)
         # execute superclass.__init__
-        super(ViconZumo, self).__init__(log_level=rospy.INFO)
+        super(ViconZumo, self).__init__(log_level=rospy.DEBUG)
 
     def _obj_trans_callback(self, data):
         """
