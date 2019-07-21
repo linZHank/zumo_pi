@@ -11,10 +11,10 @@ import numpy as np
 import rospy
 from geometry_msgs.msg import Twist, TransformStamped
 
-from zumo_driver import ZumoDriver
+import zumo_driver
 
 
-class ViconZumo(ZumoDriver):
+class ViconZumo(zumo_driver.ZumoDriver):
     def __init__(self):
         """
         A Vicon guided Zumo class
