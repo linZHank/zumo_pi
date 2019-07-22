@@ -22,7 +22,7 @@ def transform_to_pose(transform):
 
     return position, orientation
 
-KP_LIN = 5
+KP_LIN = 1
 KD_LIN = 0.5
 KP_ANG = 100
 KD_ANG = 0.1
