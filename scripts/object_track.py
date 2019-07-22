@@ -29,6 +29,7 @@ if __name__ == "__main__":
     # init errors
     obj_pos, _ = transform_to_pose(zumo.obj_transform)
     zumo_pos, zumo_orn = transform_to_pose(zumo.zumo_transform)
+    print("obj_pos: {} \nzumo_pos: {}, zumo_orn: {}".format(obj_pos, zumo_pos, zumo_orn))
     err_lin = np.linalg.norm(obj_pos[:2] - zumo_pos[:2])
     del_err_lin = 0
     ang_z2g = np.arctan2(obj_pos[1]-zumo_pos[1], obj_pos[0]-zumo_pos[0])
