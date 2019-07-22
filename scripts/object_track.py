@@ -57,6 +57,7 @@ class ViconBridge(object):
 if __name__ == "__main__":
     # Instantiate zumo driver
     tracker = ViconBridge()
+    print(tracker.obj_transform)
     # cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
     # # unit vectors
     # vec_x = np.array([1, 0])
