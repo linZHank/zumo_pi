@@ -33,6 +33,7 @@ class ViconBridge(object):
         A vicon_bridge class
         """
         rospy.init_node("vicon_tracker", anonymous=True, log_level=log_level)
+        self._rate = 10
         # Init tracked pose
         self.obj_transform = TransformStamped().transform
         self.zumo_transform = TransformStamped().transform
