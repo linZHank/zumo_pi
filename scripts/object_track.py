@@ -14,7 +14,7 @@ import numpy as np
 import rospy
 import tf
 from geometry_msgs.msg import Twist, TransformStamped
-from zumo import vicon_zumo
+# from zumo import vicon_zumo
 
 def transform_to_pose(transform):
     position = np.array([transform.translation.x, transform.translation.y, transform.translation.z])
@@ -70,11 +70,11 @@ if __name__ == "__main__":
     err_lin_pre = 0
     err_ang_pre = 0
     # Specify publishing rate
-    rate = rospy.Rate(zumo._rate)
+    rate = rospy.Rate(tracker._rate)
     while not rospy.is_shutdown():
         # Compute errors
-        obj_pos, _ = transform_to_pose(zumo.obj_transform)
-        zumo_pos, zumo_orn = transform_to_pose(zumo.zumo_transform)
+        obj_pos, _ = transform_to_pose(tracker.obj_transform)
+        zumo_pos, zumo_orn = transform_to_pose(tracker.zumo_transform)
         err_lin = np.linalg.norm(obj_pos[:2] - zumo_pos[:2])
         ang_z2g = np.arctan2(obj_pos[1]-zumo_pos[1], obj_pos[0]-zumo_pos[0])
         err_ang = ang_z2g - tf.transformations.euler_from_quaternion(zumo_orn)[2]
