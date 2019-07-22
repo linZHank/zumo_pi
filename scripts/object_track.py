@@ -22,10 +22,10 @@ def transform_to_pose(transform):
 
     return position, orientation
 
-KP_LIN = 2
+KP_LIN = 1
 KD_LIN = 0.5
 KP_ANG = 32
-KD_ANG = 0.1
+KD_ANG = 0.5
 
 class ViconBridge(object):
     def __init__(self, log_level=rospy.DEBUG):
