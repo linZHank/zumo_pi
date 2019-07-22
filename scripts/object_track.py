@@ -88,7 +88,7 @@ if __name__ == "__main__":
         cmd_vel = Twist()
         v_lin = KP_LIN*err_lin + KD_LIN*del_err_lin
         v_ang = KP_ANG*err_ang + KD_ANG*del_err_ang
-        if err_lin < 0.2:
+        if err_lin < 0.4:
             v_lin = 0
             v_ang = 0
         cmd_vel.linear.x = v_lin
