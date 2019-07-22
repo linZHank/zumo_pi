@@ -32,7 +32,7 @@ class ViconBridge(object):
         """
         A vicon_bridge class
         """
-        # rospy.init_node("vicon_tracker", anonymous=True, log_level=log_level)
+        rospy.init_node("vicon_tracker", anonymous=True, log_level=log_level)
         # Init tracked pose
         self.obj_transform = TransformStamped().transform
         self.zumo_transform = TransformStamped().transform
@@ -57,7 +57,8 @@ class ViconBridge(object):
 if __name__ == "__main__":
     # Instantiate zumo driver
     tracker = ViconBridge()
-    print(tracker.obj_transform)
+    while not rospy.is_shutdown():
+    	print(tracker.obj_transform)
     # cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
     # # unit vectors
     # vec_x = np.array([1, 0])
