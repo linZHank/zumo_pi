@@ -22,9 +22,9 @@ def transform_to_pose(transform):
 
     return position, orientation
 
-KP_LIN = 1
+KP_LIN = 2
 KD_LIN = 0.5
-KP_ANG = 20
+KP_ANG = 32
 KD_ANG = 0.1
 
 class ViconBridge(object):
@@ -88,7 +88,7 @@ if __name__ == "__main__":
         cmd_vel = Twist()
         v_lin = KP_LIN*err_lin + KD_LIN*del_err_lin
         v_ang = KP_ANG*err_ang + KD_ANG*del_err_ang
-        if err_lin < 0.4:
+        if err_lin < 0.32:
             v_lin = 0
             v_ang = 0
         cmd_vel.linear.x = v_lin
