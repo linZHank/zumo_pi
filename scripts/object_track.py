@@ -24,7 +24,7 @@ def transform_to_pose(transform):
 
 KP_LIN = 1
 KD_LIN = 0.5
-KP_ANG = 50
+KP_ANG = 20
 KD_ANG = 0.1
 
 class ViconBridge(object):
