@@ -58,30 +58,37 @@ if __name__ == "__main__":
     # Instantiate zumo driver
     tracker = ViconBridge()
     print(tracker.obj_transform)
-    # cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
-    # # unit vectors
-    # vec_x = np.array([1, 0])
-    # vec_y = np.array([0, 1])
-    # # init errors
-    # obj_pos, _ = transform_to_pose(zumo.obj_transform)
-    # zumo_pos, zumo_orn = transform_to_pose(zumo.zumo_transform)
-    # print("obj_pos: {} \nzumo_pos: {}, zumo_orn: {}".format(obj_pos, zumo_pos, zumo_orn))
-    # err_lin = np.linalg.norm(obj_pos[:2] - zumo_pos[:2])
-    # del_err_lin = 0
-    # ang_z2g = np.arctan2(obj_pos[1]-zumo_pos[1], obj_pos[0]-zumo_pos[0])
-    # err_ang = ang_z2g - tf.transformations.euler_from_quaternion(zumo_orn)[2]
-    # if err_ang > np.pi:
-    #     err_ang -= np.pi*2
-    # elif err_ang < -np.pi:
-    #     err_ang += np.pi*2
-    # del_err_ang = 0
-    # rate = rospy.Rate(zumo._rate)
-    # while not rospy.is_shutdown():
-    #     cmd_vel = Twist()
-    #     v_lin = KP_LIN*err_lin + KD_LIN*del_err_lin
-    #     v_ang = KP_ANG*err_ang + KD_ANG*del_err_ang
-    #     cmd_vel.linear.x = v_lin
-    #     cmd_vel.angular.z = v_ang
-    #     cmd_vel_pub.publish(cmd_vel)
-    #     rospy.loginfo("cmd_vel: {}".format(cmd_vel))
-    #     rate.sleep()
+    cmd_vel_pub = rospy.Publisher('cmd_vel', Twist, queue_size=1)
+    # unit vectors
+    vec_x = np.array([1, 0])
+    vec_y = np.array([0, 1])
+    # Init errors
+    err_lin = 0
+    del_err_lin = 0
+    err_ang = 0
+    del_err_ang = 0
+    err_lin_pre = 0
+    err_ang_pre = 0
+    # Specify publishing rate
+    rate = rospy.Rate(zumo._rate)
+    while not rospy.is_shutdown():
+        # Compute errors
+        obj_pos, _ = transform_to_pose(zumo.obj_transform)
+        zumo_pos, zumo_orn = transform_to_pose(zumo.zumo_transform)
+        err_lin = np.linalg.norm(obj_pos[:2] - zumo_pos[:2])
+        ang_z2g = np.arctan2(obj_pos[1]-zumo_pos[1], obj_pos[0]-zumo_pos[0])
+        err_ang = ang_z2g - tf.transformations.euler_from_quaternion(zumo_orn)[2]
+        if err_ang > np.pi:
+            err_ang -= np.pi*2
+        elif err_ang < -np.pi:
+            err_ang += np.pi*2
+        del_err_lin = err_lin - err_lin_pre
+        cmd_vel = Twist()
+        v_lin = KP_LIN*err_lin + KD_LIN*del_err_lin
+        v_ang = KP_ANG*err_ang + KD_ANG*del_err_ang
+        cmd_vel.linear.x = v_lin
+        cmd_vel.angular.z = v_ang
+        cmd_vel_pub.publish(cmd_vel)
+        rospy.loginfo("cmd_vel: {}".format(cmd_vel))
+
+        rate.sleep()
