@@ -1,5 +1,5 @@
 # Quick Start
-
+![zumopi_portrait](https://github.com/linZHank/zumo_pi/blob/master/images/zumo_pi_art.jpg)
 ## Major Hardware
 [Raspberry Pi 3 Model B+](https://www.raspberrypi.org/products/raspberry-pi-3-model-b-plus/)
 
