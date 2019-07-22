@@ -109,3 +109,8 @@ class ZumoDriver(object):
         """Stop all movement."""
         self._left_motor.run(Adafruit_MotorHAT.RELEASE)
         self._right_motor.run(Adafruit_MotorHAT.RELEASE)
+
+if __name__ == "__main__":
+    # Instantiate zumo driver
+    zumo = ZumoDriver()
+    zumo.run()

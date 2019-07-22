@@ -33,7 +33,7 @@ if __name__ == "__main__":
     err_lin = np.linalg.norm(obj_pos[:2] - zumo_pos[:2])
     del_err_lin = 0
     ang_z2g = np.arctan2(obj_pos[1]-zumo_pos[1], obj_pos[0]-zumo_pos[0])
-    err_ang = ang_z2g - tf.transformations.euler_from_quaternion(zumo_orn)
+    err_ang = ang_z2g - tf.transformations.euler_from_quaternion(zumo_orn)[2]
     if err_ang > np.pi:
         err_ang -= np.pi*2
     elif err_ang < -np.pi:
