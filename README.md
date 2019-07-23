@@ -13,6 +13,12 @@
 ## Install
 1. Flash [Ubuntu 16.04 (LXDE) and pre-installed ROS-Kinetic image](https://downloads.ubiquityrobotics.com/) into your micro ssd.
 2. Install [Adafruit-Motor-HAT-Python-Library](https://github.com/adafruit/Adafruit-Motor-HAT-Python-Library)
+```console
+cd ~
+git clone https://github.com/adafruit/Adafruit-Motor-HAT-Python-Library.git
+cd Adafruit-Motor-HAT-Python-Library
+python setup.py install
+```
 3. Install [Catkin Command Line Tools](https://catkin-tools.readthedocs.io/en/latest/)
 4. Create ROS workspace and build this package
 ```console
